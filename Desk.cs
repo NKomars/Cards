@@ -7,11 +7,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace Cards
 {
     public partial class Desk : Form
     {
+
+        private string folderPath = null;
+        private string[] fileNames = null;
+        private Random rand = new Random();
+
         public Desk()
         {
             InitializeComponent();
@@ -20,12 +26,31 @@ namespace Cards
 
         private void InitializeDesk()
         {
-            this.BackColor = Color.Green;
+            this.BackColor = Color.Green;            
         }
 
         private void LoadCards_Click(object sender, EventArgs e)
         {
+            PictureBox filePictureBox = null;
 
+            folderPath = @"C:\Users\a\Downloads\Playing Cards\playing_card_images\face";
+            fileNames = Directory.GetFiles(folderPath);
+            
+            foreach (var fileName in fileNames)
+            {
+                filePictureBox = new PictureBox()
+                {
+                    Height = 100,
+                    Width = 70,
+                    SizeMode = PictureBoxSizeMode.StretchImage,
+                    Left = rand.Next(0, 500),
+                    Top = rand.Next(50, 300),
+                    Image = Image.FromFile(fileName)
+                };
+                this.Controls.Add(filePictureBox);
+                
+                
+            }
         }
     }
 }
