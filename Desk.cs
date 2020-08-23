@@ -14,6 +14,10 @@ namespace Cards
 {
     public partial class Desk : Form
     {
+        private bool mouseHold = false;
+        private int deltaX;
+        private int deltaY;
+
         private string folderPath = null;
         private string[] fileNames = null;
         private Random rand = new Random();
@@ -67,7 +71,10 @@ namespace Cards
                     Top = rand.Next(50, 600),
                     Image = Image.FromFile(fileName)
                 };
-                filePictureBox.Click += Card_Click;
+                //filePictureBox.Click += Card_Click;
+                filePictureBox.MouseDown += Card_MouseDown;
+                filePictureBox.MouseUp += Card_MouseUp;
+                filePictureBox.MouseMove += Card_MouseMove;
                 this.Controls.Add(filePictureBox);
                 cards.Add(filePictureBox);       
             }
@@ -102,6 +109,38 @@ namespace Cards
             var card = (PictureBox)sender;
             card.Location = new Point(20, 30);
             card.BringToFront();
+        }
+
+        private void Card_MouseDown(object sender, MouseEventArgs e)
+        {
+            var card = (PictureBox)sender;
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseHold = true;
+                deltaX = e.X;
+                deltaY = e.Y;
+            }
+        }
+
+        private void Card_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseHold = false;
+            }
+        }
+
+        private void Card_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (!mouseHold)
+            {
+                return;
+            }
+            var card = (PictureBox)sender;
+            //labelCoordinates.Text = (e.X + card.Left).ToString() + "; " + (e.Y + card.Top).ToString();
+
+            card.Top = e.Y + card.Top - deltaY; 
+            card.Left = e.X + card.Left - deltaX; 
         }
     }
 }
