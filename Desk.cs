@@ -17,11 +17,13 @@ namespace Cards
         private bool mouseHold = false;
         private int deltaX;
         private int deltaY;
+        private bool cardsFlipped = false;
 
         private string folderPath = null;
         private string[] fileNames = null;
         private Random rand = new Random();
         private List<PictureBox> cards = new List<PictureBox>();
+        private List<string> filePaths = new List<string>();
 
         public Desk()
         {
@@ -31,7 +33,7 @@ namespace Cards
 
         private void InitializeDesk()
         {
-            this.BackColor = Color.Green;            
+            this.BackColor = Color.Green;
         }
 
         private string SelectFolder()
@@ -46,22 +48,22 @@ namespace Cards
             return null;
         }
 
-
         private void LoadCards_Click(object sender, EventArgs e)
         {
             PictureBox filePictureBox = null;
 
-            //folderPath = @"C:\Users\a\Downloads\Playing Cards\playing_card_images\face";
-
-            folderPath = SelectFolder();
+            folderPath = @"C:\Users\a\Downloads\Playing Cards\Playing Cards\playing_card_images\face";
+            //folderPath = SelectFolder();
             if (folderPath == null)
             {
                 return;
             }
+
             fileNames = Directory.GetFiles(folderPath);
-            
+
             foreach (var fileName in fileNames)
             {
+                filePaths.Add(fileName);
                 filePictureBox = new PictureBox()
                 {
                     Height = 100,
@@ -71,12 +73,13 @@ namespace Cards
                     Top = rand.Next(50, 600),
                     Image = Image.FromFile(fileName)
                 };
-                //filePictureBox.Click += Card_Click;
+                filePictureBox.MouseDoubleClick += Card_DoubleClick;
                 filePictureBox.MouseDown += Card_MouseDown;
                 filePictureBox.MouseUp += Card_MouseUp;
                 filePictureBox.MouseMove += Card_MouseMove;
+
                 this.Controls.Add(filePictureBox);
-                cards.Add(filePictureBox);       
+                cards.Add(filePictureBox);
             }
         }
 
@@ -86,6 +89,7 @@ namespace Cards
             foreach (var card in cards)
             {
                 card.Location = new Point(x, y);
+                card.BringToFront();
                 x++;
                 y++;
             }
@@ -98,13 +102,13 @@ namespace Cards
             {
                 for (int y = 1; y < 7; y++)
                 {
-                    cards[counter].Location = new Point(x * 75, y * 100);
+                    cards[counter].Location = new Point(x * 75, y * 105);
                     counter++;
-                }              
+                }
             }
         }
 
-        private void Card_Click(object sender, EventArgs e)
+        private void Card_DoubleClick(object sender, EventArgs e)
         {
             var card = (PictureBox)sender;
             card.Location = new Point(20, 30);
@@ -114,6 +118,7 @@ namespace Cards
         private void Card_MouseDown(object sender, MouseEventArgs e)
         {
             var card = (PictureBox)sender;
+            card.BringToFront();
             if (e.Button == MouseButtons.Left)
             {
                 mouseHold = true;
@@ -137,10 +142,38 @@ namespace Cards
                 return;
             }
             var card = (PictureBox)sender;
-            //labelCoordinates.Text = (e.X + card.Left).ToString() + "; " + (e.Y + card.Top).ToString();
+            card.Top = e.Y + card.Top - deltaY;
+            card.Left = e.X + card.Left - deltaX;
+        }
 
-            card.Top = e.Y + card.Top - deltaY; 
-            card.Left = e.X + card.Left - deltaX; 
+        private void FlipCards_Click(object sender, EventArgs e)
+        {
+            if (cardsFlipped == true)
+            {
+                ShowFrontImage();
+            }
+            else
+            {
+                ShowBackImage();
+            }
+            cardsFlipped = !cardsFlipped;
+        }
+
+        private void ShowFrontImage()
+        {
+            for (int i = 0; i < 54; i++)
+            {
+                cards[i].Image = Image.FromFile(filePaths[i]);
+            }
+        }
+
+        private void ShowBackImage()
+        {
+            string backImagePath = @"C:\Users\a\Downloads\Playing Cards\Playing Cards\playing_card_images\back\pink_back.png";
+            foreach (var card in cards)
+            {
+                card.Image = Image.FromFile(backImagePath);
+            }
         }
     }
 }

@@ -33,6 +33,7 @@
             this.LoadCards = new System.Windows.Forms.ToolStripButton();
             this.StackCards = new System.Windows.Forms.ToolStripButton();
             this.DeckCards = new System.Windows.Forms.ToolStripButton();
+            this.FlipCards = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +42,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LoadCards,
             this.StackCards,
-            this.DeckCards});
+            this.DeckCards,
+            this.FlipCards});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(629, 25);
@@ -78,6 +80,16 @@
             this.DeckCards.Text = "Deck";
             this.DeckCards.Click += new System.EventHandler(this.DeckCards_Click);
             // 
+            // FlipCards
+            // 
+            this.FlipCards.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.FlipCards.Image = ((System.Drawing.Image)(resources.GetObject("FlipCards.Image")));
+            this.FlipCards.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.FlipCards.Name = "FlipCards";
+            this.FlipCards.Size = new System.Drawing.Size(30, 22);
+            this.FlipCards.Text = "Flip";
+            this.FlipCards.Click += new System.EventHandler(this.FlipCards_Click);
+            // 
             // Desk
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -99,6 +111,7 @@
         private System.Windows.Forms.ToolStripButton LoadCards;
         private System.Windows.Forms.ToolStripButton StackCards;
         private System.Windows.Forms.ToolStripButton DeckCards;
+        private System.Windows.Forms.ToolStripButton FlipCards;
     }
 }
 
