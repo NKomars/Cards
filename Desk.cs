@@ -102,7 +102,7 @@ namespace Cards
             {
                 for (int y = 1; y < 7; y++)
                 {
-                    cards[counter].Location = new Point(x * 75, y * 105);
+                    cards[counter].Location = new Point(x * 75, y * 101);
                     counter++;
                 }
             }
